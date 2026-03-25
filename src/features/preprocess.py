@@ -3,3 +3,6 @@ def clean_data(df):
     df = df.fillna("Unknown")
     # Remove duplicates
     return df
+
+def feature_engineering(df):
+    return df
