@@ -1,5 +1,5 @@
 def clean_data(df):
     # Remove missing values
-    df = df.fillna(method='ffill')
+    df = df.fillna(0)
     # Remove duplicates
     return df
