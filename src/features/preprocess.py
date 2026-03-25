@@ -4,3 +4,5 @@ def clean_data(df):
     # Remove duplicates
     return df
 
+def feature_engineering(df):
+    return df
