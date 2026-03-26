@@ -1,18 +1,29 @@
 import pandas as pd
-import logging
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 
-def remove_duplicates(df):
-    return df.drop_duplicates()
+from src.data.ingestion import load_data
+from src.features.preprocess import preprocess_data
 
-def handle_missing(df):
-    return df.fillna(method="ffill")
 
-def preprocess_data(df):
-    logging.info("Starting preprocessing")
+def train_model(data_path):
+    # Load data
+    df = load_data(data_path)
 
-    df = remove_duplicates(df)
-    df = handle_missing(df)
+    # Preprocess
+    df = preprocess_data(df)
 
-    logging.info("Finished preprocessing")
+    # Example target
+    target = "Churn"
 
-    return df
+    X = df.drop(columns=[target])
+    y = df[target]
+
+    # Split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+    # Train
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    return model
