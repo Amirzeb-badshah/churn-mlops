@@ -2,10 +2,21 @@ import pandas as pd
 import logging
 
 def remove_duplicates(df):
-    return df.drop_duplicates()
+    """Remove duplicate rows from dataframe"""
+    initial_rows = len(df)
+    df = df.drop_duplicates()
+    removed = initial_rows - len(df)
+    if removed > 0:
+        logging.info(f"Removed {removed} duplicate rows")
+    return df
 
 def handle_missing(df):
-    return df.fillna(method="ffill")
+    """Handle missing values using forward fill"""
+    missing_count = df.isnull().sum().sum()
+    if missing_count > 0:
+        logging.info(f"Filling {missing_count} missing values")
+        df = df.ffill()
+    return df
 
 def preprocess_data(df):
     logging.info("Starting preprocessing")
