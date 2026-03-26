@@ -1,17 +1,23 @@
 from fastapi import FastAPI
 import pandas as pd
-
-from src.models.train import train_model
+import pickle
+import logging
 
 app = FastAPI()
 
-# Temporary: train model at startup
-model, _ = train_model("data/churn.csv")
+# Load model once
+with open("models/model.pkl", "rb") as f:
+    model = pickle.load(f)
 
 
 @app.post("/predict")
 def predict(data: dict):
-    df = pd.DataFrame([data])
-    prediction = model.predict(df)
-    
-    return {"prediction": int(prediction[0])}
+    try:
+        df = pd.DataFrame([data])
+        prediction = model.predict(df)
+
+        return {"prediction": int(prediction[0])}
+
+    except Exception as e:
+        logging.error(f"Prediction error: {e}")
+        return {"error": str(e)}
